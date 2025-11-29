@@ -2,10 +2,13 @@
 
 A modern, AI-powered email management application built with **Next.js 14** and **Google Gemini AI**. This intelligent email agent automatically categorizes emails, extracts key information, generates smart replies, and provides an interactive chat interface for email-related queries.
 
+🔗 **Live Demo:** [https://ai-email-agent-xvtm-j8t5yvvbu-prajesh-duttas-projects.vercel.app/](https://ai-email-agent-xvtm-j8t5yvvbu-prajesh-duttas-projects.vercel.app/)
+
 ![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=for-the-badge&logo=tailwind-css)
 ![Gemini AI](https://img.shields.io/badge/Gemini-2.5_Flash-4285F4?style=for-the-badge&logo=google)
+![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)
 
 ## ✨ Features
 
@@ -39,8 +42,8 @@ A modern, AI-powered email management application built with **Next.js 14** and 
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/email-productivity-agent.git
-   cd email-productivity-agent
+   git clone https://github.com/prajesh-dutta/ai-email-agent.git
+   cd ai-email-agent
    ```
 
 2. **Install dependencies**
@@ -149,7 +152,7 @@ The project includes `vercel.json` with optimized settings:
    - `GEMINI_API_KEY`: Your Google Gemini API key
 4. Deploy!
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/email-productivity-agent)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/prajesh-dutta/ai-email-agent)
 
 ## 📸 Screenshots
 
