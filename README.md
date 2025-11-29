@@ -2,7 +2,7 @@
 
 A modern, AI-powered email management application built with **Next.js 14** and **Google Gemini AI**. This intelligent email agent automatically categorizes emails, extracts key information, generates smart replies, and provides an interactive chat interface for email-related queries.
 
-🔗 **Live Demo:** [https://ai-email-agent-xvtm-j8t5yvvbu-prajesh-duttas-projects.vercel.app/](https://ai-email-agent-xvtm-j8t5yvvbu-prajesh-duttas-projects.vercel.app/)
+🔗 **Live Demo:** [https://email.prajes.me/](https://email.prajes.me/)
 
 ![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
