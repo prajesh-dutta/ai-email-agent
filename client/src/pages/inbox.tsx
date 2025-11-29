@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { format } from "date-fns";
-import { Mail, MailOpen, Sparkles, Tag, Loader2, RefreshCw, CheckCircle2, Clock, AlertTriangle, Trash2, FileText } from "lucide-react";
+import { Mail, MailOpen, Sparkles, Tag, Loader2, RefreshCw, CheckCircle2, Clock, AlertTriangle, Trash2, FileText, ListChecks, PenLine, Wand2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -67,6 +67,59 @@ export default function InboxPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/emails"] });
+    },
+  });
+
+  const extractActionsMutation = useMutation({
+    mutationFn: async (emailId: number) => {
+      return apiRequest("POST", `/api/emails/${emailId}/extract-actions`);
+    },
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/emails"] });
+      if (data.email) {
+        setSelectedEmail(data.email);
+      }
+      const count = data.actionItems?.length ?? 0;
+      toast({
+        title: "Action Items Extracted",
+        description: count > 0 
+          ? `Found ${count} action item${count > 1 ? "s" : ""} in this email.`
+          : "No action items found in this email.",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Extraction Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const generateDraftMutation = useMutation({
+    mutationFn: async (emailId: number) => {
+      return apiRequest("POST", `/api/emails/${emailId}/generate-draft`);
+    },
+    onSuccess: (data: any) => {
+      if (data.draft) {
+        queryClient.invalidateQueries({ queryKey: ["/api/drafts"] });
+        toast({
+          title: "Draft Created",
+          description: "A reply draft has been saved to your Drafts folder.",
+        });
+      } else {
+        toast({
+          title: "No Reply Needed",
+          description: "This email doesn't require a reply (newsletter/promotional).",
+        });
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Draft Generation Failed",
+        description: error.message,
+        variant: "destructive",
+      });
     },
   });
 
@@ -230,6 +283,38 @@ export default function InboxPage() {
                   )}
                 </div>
               </DialogHeader>
+              
+              <div className="flex items-center gap-2 mt-4 flex-wrap">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => extractActionsMutation.mutate(selectedEmail.id)}
+                  disabled={extractActionsMutation.isPending}
+                  data-testid="button-extract-actions"
+                >
+                  {extractActionsMutation.isPending ? (
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  ) : (
+                    <ListChecks className="h-4 w-4 mr-2" />
+                  )}
+                  Extract Actions
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => generateDraftMutation.mutate(selectedEmail.id)}
+                  disabled={generateDraftMutation.isPending}
+                  data-testid="button-generate-draft"
+                >
+                  {generateDraftMutation.isPending ? (
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  ) : (
+                    <PenLine className="h-4 w-4 mr-2" />
+                  )}
+                  Generate Draft
+                </Button>
+              </div>
+
               <ScrollArea className="flex-1 mt-4">
                 <div className="prose prose-sm dark:prose-invert max-w-none" data-testid="text-modal-body">
                   <p className="whitespace-pre-wrap">{selectedEmail.body}</p>
