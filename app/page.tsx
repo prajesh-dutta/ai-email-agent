@@ -175,7 +175,10 @@ export default function HomePage() {
   const currentSort = sortOptions.find(s => s.value === sortBy);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-100">
+    <div className="flex h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-indigo-50/30 to-purple-50/30 relative">
+      {/* Animated background pattern */}
+      <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #6366f1 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+      
       {/* Left Sidebar */}
       <ResponsiveSidebar 
         isOpen={sidebarOpen} 
@@ -184,18 +187,23 @@ export default function HomePage() {
       />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col lg:flex-row h-full overflow-hidden">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* Email List Panel */}
         <div className={cn(
-          'flex flex-col bg-white transition-all duration-300 border-r border-slate-200/80',
+          'flex flex-col bg-white/95 backdrop-blur-xl transition-all duration-300 border-r border-slate-200/80 shadow-xl relative',
           // Mobile: Full width when no email selected, hidden when email selected
           selectedEmail ? 'hidden md:flex' : 'flex',
           // Tablet & Desktop sizing
           'md:w-full',
-          selectedEmail ? 'lg:w-[380px] xl:w-[420px]' : 'lg:flex-1'
+          selectedEmail ? 'lg:w-[380px] xl:w-[420px]' : 'lg:flex-1',
+          // Critical: Ensure proper height and scrolling on all viewports
+          'h-full max-h-screen'
         )}>
+          {/* Subtle gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-indigo-50/20 via-transparent to-purple-50/10 pointer-events-none" />
+          
           {/* Header */}
-          <div className="p-3 sm:p-4 lg:p-5 border-b border-slate-200/80 bg-gradient-to-r from-white via-white to-indigo-50/30">
+          <div className="p-3 sm:p-4 lg:p-5 border-b border-slate-200/80 bg-gradient-to-r from-white/90 via-indigo-50/40 to-purple-50/30 backdrop-blur-sm relative z-10">
             {/* Top Row: Menu, Title, Process Button */}
             <div className="flex items-center justify-between gap-2 sm:gap-4 mb-3 sm:mb-4">
               <div className="flex items-center gap-2 sm:gap-3">
@@ -226,10 +234,10 @@ export default function HomePage() {
                 onClick={processInbox}
                 disabled={state.isProcessing || stats.uncategorized === 0}
                 className={cn(
-                  'flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 lg:px-5 py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300',
+                  'flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 lg:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm transition-all duration-300 relative overflow-hidden',
                   state.isProcessing || stats.uncategorized === 0
-                    ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-indigo-600 via-indigo-600 to-purple-600 text-white hover:from-indigo-500 hover:via-indigo-500 hover:to-purple-500 shadow-lg shadow-indigo-500/30'
+                    ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white hover:scale-105 shadow-strong shadow-indigo-500/40 ring-2 ring-indigo-300/50 hover:shadow-glow'
                 )}
               >
                 {state.isProcessing ? (
@@ -255,14 +263,14 @@ export default function HomePage() {
             </div>
 
             {/* Search Bar */}
-            <div className="relative mb-3 glow-focus rounded-lg sm:rounded-xl">
+            <div className="relative mb-3 glow-focus rounded-xl sm:rounded-2xl">
               <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search emails..."
-                className="w-full pl-9 sm:pl-11 pr-9 sm:pr-10 py-2.5 sm:py-3 bg-slate-50/80 border border-slate-200 rounded-lg sm:rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400 focus:outline-none focus:bg-white transition-all"
+                className="w-full pl-9 sm:pl-11 pr-9 sm:pr-10 py-2.5 sm:py-3 bg-gradient-to-br from-slate-50 to-indigo-50/20 border border-slate-200/80 rounded-xl sm:rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400 focus:outline-none focus:bg-white transition-all shadow-soft focus:shadow-medium placeholder:text-slate-400"
               />
               {searchQuery && (
                 <button
@@ -357,7 +365,7 @@ export default function HomePage() {
           </div>
 
           {/* Email List */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto overscroll-contain min-h-0">
             {filteredAndSortedEmails.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center p-6 sm:p-8 animate-fade-in">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-slate-100 via-slate-100 to-indigo-100 rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 sm:mb-5 shadow-inner">
@@ -410,41 +418,53 @@ export default function HomePage() {
           <div className="hidden lg:flex flex-1 flex-col items-center justify-center relative overflow-hidden">
             {/* Animated Background Pattern */}
             <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
-              {/* Floating Orbs */}
-              <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-br from-indigo-200/40 to-purple-200/40 rounded-full blur-3xl animate-float" />
-              <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-gradient-to-br from-pink-200/40 to-rose-200/40 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-blue-200/30 to-cyan-200/30 rounded-full blur-3xl animate-pulse-slow" />
+              {/* Floating Orbs with enhanced animation */}
+              <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-gradient-to-br from-indigo-300/40 via-purple-300/40 to-pink-300/40 rounded-full blur-3xl animate-float" />
+              <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-br from-pink-300/40 via-rose-300/40 to-orange-300/40 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }} />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[32rem] h-[32rem] bg-gradient-to-br from-blue-200/30 via-cyan-200/30 to-teal-200/30 rounded-full blur-3xl animate-pulse-slow" />
               
               {/* Grid Pattern Overlay */}
-              <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, #6366f1 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+              <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, #6366f1 1.5px, transparent 1.5px)', backgroundSize: '32px 32px' }} />
               
-              {/* Decorative Lines */}
-              <svg className="absolute inset-0 w-full h-full opacity-10" xmlns="http://www.w3.org/2000/svg">
+              {/* Decorative Lines with glow */}
+              <svg className="absolute inset-0 w-full h-full opacity-15" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#6366f1" />
-                    <stop offset="100%" stopColor="#a855f7" />
+                    <stop offset="50%" stopColor="#8b5cf6" />
+                    <stop offset="100%" stopColor="#ec4899" />
                   </linearGradient>
+                  <filter id="glow">
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                    <feMerge>
+                      <feMergeNode in="coloredBlur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
                 </defs>
-                <path d="M0,50 Q250,0 500,50 T1000,50" fill="none" stroke="url(#lineGrad)" strokeWidth="1" className="animate-dash" />
-                <path d="M0,150 Q250,100 500,150 T1000,150" fill="none" stroke="url(#lineGrad)" strokeWidth="1" className="animate-dash" style={{ animationDelay: '0.5s' }} />
-                <path d="M0,250 Q250,200 500,250 T1000,250" fill="none" stroke="url(#lineGrad)" strokeWidth="1" className="animate-dash" style={{ animationDelay: '1s' }} />
+                <path d="M0,50 Q250,0 500,50 T1000,50" fill="none" stroke="url(#lineGrad)" strokeWidth="2" filter="url(#glow)" className="animate-dash" />
+                <path d="M0,150 Q250,100 500,150 T1000,150" fill="none" stroke="url(#lineGrad)" strokeWidth="2" filter="url(#glow)" className="animate-dash" style={{ animationDelay: '0.5s' }} />
+                <path d="M0,250 Q250,200 500,250 T1000,250" fill="none" stroke="url(#lineGrad)" strokeWidth="2" filter="url(#glow)" className="animate-dash" style={{ animationDelay: '1s' }} />
               </svg>
             </div>
             
-            {/* Center Content */}
-            <div className="relative z-10 flex flex-col items-center">
-              <div className="relative">
-                <div className="w-24 h-24 bg-white/80 backdrop-blur-xl rounded-3xl flex items-center justify-center shadow-2xl shadow-indigo-500/20 border border-white/50">
-                  <Sparkles className="w-10 h-10 text-indigo-500" />
+            {/* Center Content with enhanced styling */}
+            <div className="relative z-10 flex flex-col items-center animate-fade-in-scale">
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-[2rem] blur-2xl opacity-40 group-hover:opacity-60 transition-opacity" />
+                <div className="relative w-28 h-28 bg-white/95 backdrop-blur-xl rounded-[2rem] flex items-center justify-center shadow-strong shadow-indigo-500/30 border border-white/80 ring-4 ring-indigo-100/50 group-hover:scale-110 transition-transform duration-300">
+                  <Sparkles className="w-12 h-12 text-indigo-500" />
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-gradient-to-br from-emerald-400 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg animate-bounce" style={{ animationDuration: '2s' }}>
-                  <Zap className="w-4 h-4 text-white" />
+                <div className="absolute -bottom-2 -right-2 w-10 h-10 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-strong shadow-emerald-500/40 ring-4 ring-white/80 animate-bounce group-hover:scale-110 transition-transform" style={{ animationDuration: '2s' }}>
+                  <Zap className="w-5 h-5 text-white drop-shadow-[0_0_4px_rgba(255,255,255,0.8)]" />
                 </div>
               </div>
-              <div className="mt-6 text-center">
-                <p className="text-sm font-semibold text-indigo-600/80">AI-Powered Email Assistant</p>
-                <p className="text-xs text-slate-400 mt-1">Gemini 2.5 Flash</p>
+              <div className="mt-8 text-center space-y-2">
+                <p className="text-base font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">AI-Powered Email Assistant</p>
+                <div className="flex items-center justify-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full shadow-soft border border-indigo-100/50">
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-glow" />
+                  <p className="text-xs font-semibold text-slate-600">Powered by Gemini 2.5 Flash</p>
+                </div>
               </div>
             </div>
           </div>

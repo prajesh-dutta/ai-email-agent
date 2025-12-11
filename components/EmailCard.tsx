@@ -47,31 +47,37 @@ export default function EmailCard({ email, isSelected, isCompact, onClick }: Ema
     <div
       onClick={onClick}
       className={cn(
-        'group relative cursor-pointer card-transition',
+        'group relative cursor-pointer card-transition overflow-hidden',
         isCompact ? 'p-2.5 sm:p-3' : 'p-3 sm:p-4',
-        'hover:bg-gradient-to-r hover:from-indigo-50/80 hover:to-purple-50/50',
-        isSelected && 'bg-gradient-to-r from-indigo-50 to-purple-50/60 border-l-[3px] border-l-indigo-600',
-        !email.read && !isSelected && 'bg-gradient-to-r from-blue-50/40 to-indigo-50/20',
-        email.read && !isSelected && 'bg-white hover:bg-slate-50/80'
+        'hover:bg-gradient-to-br hover:from-indigo-50 hover:via-purple-50/50 hover:to-pink-50/30',
+        isSelected && 'bg-gradient-to-br from-indigo-100/90 via-purple-100/60 to-pink-50/40 border-l-[4px] border-l-indigo-600 shadow-medium',
+        !email.read && !isSelected && 'bg-gradient-to-br from-blue-50/60 via-indigo-50/40 to-purple-50/20',
+        email.read && !isSelected && 'bg-white/90 hover:bg-white hover:shadow-soft backdrop-blur-sm'
       )}
     >
-      {/* Unread Indicator - Animated */}
+      {/* Unread Indicator - Animated with glow */}
       {!email.read && !isSelected && (
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 sm:h-8 bg-gradient-to-b from-indigo-500 to-purple-500 rounded-r-full shadow-sm shadow-indigo-500/30" />
+        <>
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 sm:h-8 bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-500 rounded-r-full shadow-glow animate-pulse" />
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 sm:h-8 bg-gradient-to-b from-indigo-400 via-purple-400 to-pink-400 rounded-r-full blur-sm" />
+        </>
       )}
 
       <div className="flex items-start gap-2 sm:gap-3">
-        {/* Avatar / Read indicator */}
+        {/* Avatar / Read indicator - Enhanced with ring */}
         <div className={cn(
-          'flex-shrink-0 w-9 h-9 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl flex items-center justify-center font-semibold text-xs sm:text-sm card-transition relative overflow-hidden',
+          'flex-shrink-0 w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl flex items-center justify-center font-bold text-xs sm:text-sm card-transition relative overflow-hidden',
           !email.read 
-            ? 'bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25' 
-            : 'bg-gradient-to-br from-slate-100 to-slate-200 text-slate-600',
-          isSelected && 'bg-gradient-to-br from-indigo-500 via-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25'
+            ? 'bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 text-white shadow-strong shadow-indigo-500/30 ring-2 ring-indigo-200/50' 
+            : 'bg-gradient-to-br from-slate-200 via-slate-100 to-slate-200 text-slate-600 shadow-soft',
+          isSelected && 'bg-gradient-to-br from-indigo-600 via-purple-700 to-pink-600 text-white shadow-strong shadow-purple-500/40 ring-2 ring-purple-300/60 scale-105'
         )}>
           <span className="relative z-10">{email.sender.charAt(0).toUpperCase()}</span>
           {(!email.read || isSelected) && (
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20" />
+            <>
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/15 to-white/25" />
+              <div className="absolute -top-1 -right-1 w-2 h-2 bg-white/40 rounded-full blur-sm" />
+            </>
           )}
         </div>
 
@@ -128,10 +134,16 @@ export default function EmailCard({ email, isSelected, isCompact, onClick }: Ema
         </div>
       </div>
 
-      {/* Hover highlight effect */}
+      {/* Hover highlight effect with shimmer */}
       <div className={cn(
-        'absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none',
-        'bg-gradient-to-r from-transparent via-indigo-500/[0.02] to-transparent'
+        'absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none',
+        'bg-gradient-to-r from-transparent via-indigo-500/[0.04] to-purple-500/[0.02]'
+      )} />
+      
+      {/* Subtle border glow on hover */}
+      <div className={cn(
+        'absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-lg',
+        'shadow-[inset_0_0_0_1px_rgba(139,92,246,0.1)]'
       )} />
     </div>
   );

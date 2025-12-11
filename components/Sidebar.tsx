@@ -129,18 +129,22 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className="w-80 bg-gradient-to-b from-slate-900 to-slate-800 text-white flex flex-col h-screen border-r border-slate-700/50">
+    <aside className="w-80 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white flex flex-col h-screen border-r border-slate-700/50 shadow-2xl relative overflow-hidden">
+      {/* Animated background orbs */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-600/20 to-purple-600/20 rounded-full blur-3xl animate-float" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+      
       {/* Logo */}
-      <div className="p-5 border-b border-slate-700/50">
+      <div className="p-5 border-b border-slate-700/50 relative z-10 backdrop-blur-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-500 rounded-xl flex items-center justify-center shadow-strong shadow-indigo-500/40 ring-2 ring-indigo-400/30">
               <Mail className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-bold tracking-tight">Email Agent</h1>
+              <h1 className="text-lg font-bold tracking-tight text-gradient-primary bg-gradient-to-r from-white via-indigo-200 to-purple-200 bg-clip-text text-transparent">Email Agent</h1>
               <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-medium uppercase tracking-wider">
-                <Zap className="w-3 h-3 text-amber-400" />
+                <Zap className="w-3 h-3 text-amber-400 animate-pulse" />
                 Gemini 2.5 Flash
               </div>
             </div>
@@ -156,23 +160,26 @@ export default function Sidebar() {
       </div>
 
       {/* Navigation */}
-      <nav className="p-3 space-y-1">
+      <nav className="p-3 space-y-1 relative z-10">
         {navItems.map((item) => (
           <Link
             key={item.href}
             href={item.href}
             className={cn(
-              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200',
-              'hover:bg-white/10',
-              pathname === item.href && 'bg-gradient-to-r from-indigo-600 to-indigo-500 shadow-lg shadow-indigo-500/25'
+              'flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 relative overflow-hidden group',
+              'hover:bg-white/10 hover:shadow-medium',
+              pathname === item.href && 'bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 shadow-strong shadow-indigo-500/40 scale-105'
             )}
           >
-            <item.icon className="w-5 h-5" />
-            <span className="flex-1 font-medium">{item.label}</span>
+            {pathname === item.href && (
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" />
+            )}
+            <item.icon className={cn('w-5 h-5 relative z-10', pathname === item.href && 'drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]')} />
+            <span className="flex-1 font-medium relative z-10">{item.label}</span>
             {item.badge !== undefined && item.badge > 0 && (
               <span className={cn(
-                'px-2 py-0.5 text-xs font-semibold rounded-full',
-                pathname === item.href ? 'bg-white/20' : 'bg-slate-700 text-slate-300'
+                'px-2.5 py-1 text-xs font-bold rounded-full relative z-10 shadow-sm',
+                pathname === item.href ? 'bg-white/25 text-white badge-glow' : 'bg-slate-700 text-slate-200'
               )}>
                 {item.badge}
               </span>
@@ -182,16 +189,17 @@ export default function Sidebar() {
       </nav>
 
       {/* Agent Brain Section */}
-      <div className="flex-1 overflow-hidden flex flex-col border-t border-slate-700/50 mt-2">
+      <div className="flex-1 overflow-hidden flex flex-col border-t border-slate-700/50 mt-2 relative z-10">
         <button
           onClick={() => setBrainExpanded(!brainExpanded)}
-          className="flex items-center gap-3 p-4 hover:bg-white/5 transition-colors"
+          className="flex items-center gap-3 p-4 hover:bg-white/5 transition-all duration-300 group relative overflow-hidden"
         >
-          <div className="w-8 h-8 bg-gradient-to-br from-amber-500 to-orange-600 rounded-lg flex items-center justify-center shadow-lg shadow-amber-500/20">
-            <Brain className="w-4 h-4 text-white" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="w-8 h-8 bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 rounded-lg flex items-center justify-center shadow-strong shadow-amber-500/40 ring-2 ring-amber-400/20 relative z-10">
+            <Brain className="w-4 h-4 text-white drop-shadow-[0_0_4px_rgba(255,255,255,0.5)]" />
           </div>
-          <div className="flex-1 text-left">
-            <span className="font-semibold">Agent Brain</span>
+          <div className="flex-1 text-left relative z-10">
+            <span className="font-semibold bg-gradient-to-r from-white to-amber-200 bg-clip-text text-transparent">Agent Brain</span>
             <p className="text-[10px] text-slate-400 uppercase tracking-wider">System Prompts</p>
           </div>
           {brainExpanded ? (
